@@ -1,5 +1,6 @@
 package com.example.ahmed.bakingapp;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -60,6 +61,9 @@ public class StepDetailsFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         stepArrayList = Parcels.unwrap(getArguments().getParcelable("steps_list"));
+
+        playerView.setDefaultArtwork(BitmapFactory.decodeResource
+                (getResources(), R.drawable.thumbnail));
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("position"))
