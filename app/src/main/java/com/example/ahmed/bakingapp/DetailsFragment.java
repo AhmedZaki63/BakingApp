@@ -6,8 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ahmed.bakingapp.Adapters.StepAdapter;
 import com.example.ahmed.bakingapp.Models.Ingredient;
@@ -30,6 +34,7 @@ public class DetailsFragment extends Fragment {
     ArrayList<Ingredient> ingredientArrayList;
     StepAdapter stepAdapter;
     StepDataListener stepDataListener;
+    String ingredients_text = "";
 
     @BindView(R.id.steps_list)
     RecyclerView stepView;
@@ -39,15 +44,13 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
 
         recipe = Parcels.unwrap(getArguments().getParcelable("recipe"));
 
-        String ingredients_text = "";
         int i = 1;
         for (Ingredient ingredient : recipe.getIngredients())
             ingredients_text = ingredients_text.concat(i++ + ") " + ingredient.getIngredient() + "\n");
-
-        addIngredientsToWidget(ingredients_text);
 
         stepArrayList = recipe.getSteps();
         ingredientArrayList = recipe.getIngredients();
@@ -55,7 +58,29 @@ public class DetailsFragment extends Fragment {
         stepView.setAdapter(stepAdapter);
         stepView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
 
+        if (getActivity().findViewById(R.id.step_details_frame_layout) != null
+                && savedInstanceState == null)
+            stepDataListener.setStepData(stepArrayList, 0);
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.details_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add_to_widget) {
+            addIngredientsToWidget(ingredients_text);
+            Toast.makeText(getContext(), "Recipe's ingredients added to widget", Toast.LENGTH_SHORT)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setStepDataListener(StepDataListener stepDataListener) {

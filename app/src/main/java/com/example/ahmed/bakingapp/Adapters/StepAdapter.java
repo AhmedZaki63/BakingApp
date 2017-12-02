@@ -57,7 +57,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.MyViewHolder> 
                 holder.item_text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        stepDataListener.setStepData(stepArrayList, holder.getAdapterPosition());
+                        stepDataListener.setStepData(stepArrayList, holder.getAdapterPosition() - 3);
                     }
                 });
                 break;

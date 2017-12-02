@@ -1,8 +1,9 @@
 package com.example.ahmed.bakingapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.example.ahmed.bakingapp.Models.Step;
 
@@ -12,8 +13,8 @@ import java.util.ArrayList;
 
 public class DetailsActivity extends AppCompatActivity implements StepDataListener {
 
-    DetailsFragment detailsFragment;
     public boolean isTwoPane = false;
+    DetailsFragment detailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,16 @@ public class DetailsActivity extends AppCompatActivity implements StepDataListen
         detailsFragment.setStepDataListener(this);
         if (findViewById(R.id.step_details_frame_layout) != null)
             isTwoPane = true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
