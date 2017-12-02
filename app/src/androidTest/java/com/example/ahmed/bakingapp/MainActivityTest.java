@@ -21,6 +21,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -59,12 +60,12 @@ public class MainActivityTest {
     public void mainActivityTest() {
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        ViewInteraction recipeTitle = onView(
+        ViewInteraction recipeItemTitle = onView(
                 allOf(withId(R.id.recipe_item_title), withText("Brownies"),
                         childAtPosition(
                                 childAtPosition(
@@ -72,33 +73,36 @@ public class MainActivityTest {
                                         0),
                                 1),
                         isDisplayed()));
-        recipeTitle.check(matches(withText("Brownies")));
+        recipeItemTitle.check(matches(withText("Brownies")));
 
-        ViewInteraction recyclerView = onView(
+        ViewInteraction recipesList = onView(
                 allOf(withId(R.id.recipes_list),
                         childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        recipesList.perform(actionOnItemAtPosition(0, click()));
 
-        ViewInteraction step = onView(
+        ViewInteraction stepsList = onView(withId(R.id.steps_list));
+        stepsList.perform(scrollToPosition(4));
+
+        ViewInteraction stepItemTtext = onView(
                 allOf(withId(R.id.step_item_text), withText("Starting prep"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.steps_list),
-                                        3),
+                                        4),
                                 0),
                         isDisplayed()));
-        step.perform(click());
+        stepItemTtext.perform(click());
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         ViewInteraction stepDescription = onView(
-                allOf(withId(R.id.step_description), withText("1. Preheat the oven to 350°F. Butter a 9\" deep dish pie pan."),
+                allOf(withId(R.id.step_description),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
@@ -107,7 +111,7 @@ public class MainActivityTest {
                         isDisplayed()));
         stepDescription.check(matches(withText("1. Preheat the oven to 350°F. Butter a 9\" deep dish pie pan.")));
 
-        ViewInteraction nextButton = onView(
+        ViewInteraction nextStepButton = onView(
                 allOf(withId(R.id.next_step_btn),
                         childAtPosition(
                                 childAtPosition(
@@ -115,10 +119,10 @@ public class MainActivityTest {
                                         2),
                                 0),
                         isDisplayed()));
-        nextButton.perform(click());
+        nextStepButton.perform(click());
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
